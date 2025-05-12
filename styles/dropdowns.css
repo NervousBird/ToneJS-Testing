@@ -1,0 +1,40 @@
+.kit-dropdown {
+    position: relative;
+    display: inline-block;
+    max-width: 100%;
+}
+
+.instrument-dropdown {
+    height: 20px;
+    width: 120px;
+    align-items: center;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    width: 119px;
+    right: 40px;
+    z-index: 1;
+    border: 1px solid black;
+    grid-template-columns: auto;
+    background-color: lightseagreen;
+}
+
+.dropdown-content a {
+    color: black;
+    padding-top: 3px;
+    padding-bottom: 3px;
+    padding-left: 10px;
+    padding-right: 10px;
+    font-size: 12px;
+    height: 15px;
+    text-align: center;
+    text-decoration: none;
+    display: block;
+}
+
+.dropdown-content a:hover {
+    background-color: orange;
+    font-size: 18px;
+}

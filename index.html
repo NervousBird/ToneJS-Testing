@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./styles/index.css">
+    <link rel="stylesheet" href="./styles/inputs.css">
+    <link rel="stylesheet" href="./styles/buttons.css">
+    <link rel="stylesheet" href="./styles/dropdowns.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <title>Tone.js Testing</title>
+</head>
+<body>
+    <div class="app">
+        <!-- <div class="container">
+            <button id="start">Start</button>
+            <button id="test">Test</button>
+            <button id="button1">1</button>
+            <button id="button2">2</button>
+            <button id="button3">3</button>
+            <button id="button4">4</button>
+            <button id="button5">5</button>
+        </div> -->
+        <div class="workspace-visuals-container">
+            <div class="col">
+                .
+            </div>
+            <div class="col">
+                <div class="image">
+                    IMAGE
+                </div>
+                <div class="workspace-inputs">
+                    <div class="tempo-container">
+                      <label for="tempo">Tempo</label>
+                      <input type="number" id="tempo" value="140">
+                    </div>
+                    <div class="inputgroup">
+                      <label for="beatsInput">Beats</label>
+                      <input type="number" id="beatsInput" value="8">
+                    </div>
+                    <div>
+                      <label for="countsInput">Counts</label>
+                      <input type="number" id="countsInput" value="3" disabled>  
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div id="waveform">.</div>
+            </div>
+        </div>
+        <div class="workspace-title-container">
+            <div class="kit-dropdown">
+                <button id="kits" class="instrument-dropdown">Kits</button>
+                <div class="dropdown-content kit-choice">
+                    <a href="#" class="kit">Kit 1</a>
+                    <a href="#" class="kit">Kit 2</a>
+                    <a href="#" class="kit">Kit 3</a>
+                </div>
+            </div>
+            <div class="playstop-buttons">
+                <button class="btn-icon" id="play"><i class="bi bi-play-fill"></i></button>
+                <button class="btn-icon" id="pause" disabled><i class="bi bi-pause-fill"></i></button>
+                <button class="btn-icon" id="stop" disabled><i class="bi bi-stop-fill"></i></button>
+            </div>
+            <div class="saveload-buttons">
+                <button class="btn-icon" id="save"><i class="bi bi-floppy"></i></button>
+                <button class="btn-icon" id="laod"><i class="bi bi-file-arrow-up"></i></button>
+            </div>
+        </div>
+        <div class="workspace">
+            <div class="instruments-container">
+                <div class="dropdowns-container">
+                    <p class="title">Instruments</p>
+                    <button>Instrument 1</button>
+                    <button>Instrument 2</button>
+                </div>
+                <div class="close-container">
+                    <p class="title">.</p>
+                    <div class="remove-button"><i class="bi bi-x-octagon-fill"></i></div>
+                    <div class="remove-button"><i class="bi bi-x-octagon-fill"></i></div>
+                    <div class="remove-button"><i class="bi bi-x-octagon-fill"></i></div>
+                    <div class="remove-button"><i class="bi bi-x-octagon-fill"></i></div>
+                    <div class="remove-button"><i class="bi bi-x-octagon-fill"></i></div>
+                    <div class="remove-button"><i class="bi bi-x-octagon-fill"></i></div>
+                    <div class="remove-button"><i class="bi bi-x-octagon-fill"></i></div>
+                </div>
+            </div>
+            <div class="beats-container">
+                <div class="beatCol">
+                    <p class="onBeat">1</p>
+                    <div class="beat">1</div>
+                    <div class="beat">1</div>
+                    <div class="beat">1</div>
+                    <div class="beat">1</div>
+                    <div class="beat">1</div>
+                    <div class="beat">1</div>
+                    <div class="beat">1</div>
+                </div>
+                <div class="countCol">
+                    <p class="onCount">.</p>
+                    <div class="beat">.</div>
+                    <div class="beat">.</div>
+                    <div class="beat">.</div>
+                    <div class="beat">.</div>
+                    <div class="beat">.</div>
+                    <div class="beat">.</div>
+                    <div class="beat">.</div>
+                </div>
+                <div class="countCol">
+                    <p class="onCount">.</p>
+                    <div class="beat">.</div>
+                    <div class="beat">.</div>
+                </div>
+                <div class="countCol">
+                    <p class="onCount">.</p>
+                    <div class="beat">.</div>
+                    <div class="beat">.</div>
+                </div>
+                <div class="beatCol">
+                    <p class="onBeat">2</p>
+                    <div class="beat">2</div>
+                    <div class="beat">2</div>
+                </div>
+                <div class="countCol">
+                    <p class="onCount">.</p>
+                    <div class="beat">.</div>
+                    <div class="beat">.</div>
+                </div>
+                <div class="countCol">
+                    <p class="onCount">.</p>
+                    <div class="beat">.</div>
+                    <div class="beat">.</div>
+                </div>
+                <div class="countCol">
+                    <p class="onCount">.</p>
+                    <div class="beat">.</div>
+                    <div class="beat">.</div>
+                </div>
+                <div class="beatCol">
+                    <p class="onBeat">3</p>
+                    <div class="beat">3</div>
+                    <div class="beat">3</div>
+                </div>
+                <div class="countCol">
+                    <p class="onCount">.</p>
+                    <div class="beat">.</div>
+                    <div class="beat">.</div>
+                </div>
+                <div class="countCol">
+                    <p class="onCount">.</p>
+                    <div class="beat">.</div>
+                    <div class="beat">.</div>
+                </div>
+                <div class="countCol">
+                    <p class="onCount">.</p>
+                    <div class="beat">.</div>
+                    <div class="beat">.</div>
+                </div>
+                <div class="beatCol">
+                    <p class="onBeat">4</p>
+                    <div class="beat">4</div>
+                    <div class="beat">4</div>
+                </div>
+                <div class="countCol">
+                    <p class="onCount">.</p>
+                    <div class="beat">.</div>
+                    <div class="beat">.</div>
+                </div>
+                <div class="countCol">
+                    <p class="onCount">.</p>
+                    <div class="beat">.</div>
+                    <div class="beat">.</div>
+                </div>
+                <div class="countCol">
+                    <p class="onCount">.</p>
+                    <div class="beat">.</div>
+                    <div class="beat">.</div>
+                    <div class="beat">.</div>
+                    <div class="beat">.</div>
+                    <div class="beat">.</div>
+                </div>
+                <!-- <div class="guides">
+                    <div class="guide1">
+                        1
+                    </div>
+                    <div class="guide2">
+                        2
+                    </div>
+                </div> -->
+            </div>
+            <div class="controls-container">
+                <div class="volumes-container">
+                    <p class="title">Volume</p>
+                    <input type="range">
+                    <input type="range">
+                    <input type="range">
+                    <input type="range">
+                    <input type="range">
+                    <input type="range">
+                </div>
+                <div class="pitches-container">
+                    <p class="title">Pitch</p>
+                    <input type="range">
+                    <input type="range">
+                </div>
+            </div>
+        </div>
+        <!-- <div class="guides">
+            <div class="guide1">
+                1
+            </div>
+            <div class="guide2">
+                2
+            </div>
+        </div> -->
+        <footer>
+            <p>By: Leo Walton</p>
+        </footer>
+    </div>
+    <script src="http://unpkg.com/tone"></script>
+    <script src="./js/index.js"></script>
+</body>
+</html>

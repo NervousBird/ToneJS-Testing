@@ -1,0 +1,35 @@
+button {
+    min-width: none;
+    /* max-width: 110px; */
+    max-width: 130px;
+    border-radius: 0px;
+    border: 1px solid black;
+    padding-left: 5px;
+    padding-right: 5px;
+    background-color: lightcoral;
+}
+
+button:hover {
+    background-color: orange;
+    box-shadow: 0px 0px 2px 2px orange;
+    font-size: 14px;
+    color: white;
+}
+
+button:disabled {
+    background-color: grey;
+}
+
+.btn-icon {
+    font-size: 20px;
+    width: 30px;
+    height: 30px;
+    padding: 0px;
+    margin: 2px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.btn-icon:hover {
+    font-size: 20px;
+}
