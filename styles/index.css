@@ -45,8 +45,8 @@ body {
     justify-content: center;
     padding-top: 10px;
     padding-bottom: 10px;
-    padding-left: 50px;
-    padding-right: 50px;
+    padding-left: 25vw;
+    padding-right: 25vw;
     background-color: lightseagreen;
 }
 
@@ -59,16 +59,34 @@ body {
 }
 
 .image {
-    background-color: blue;
+    background-color: lightseagreen;
     width: 120px;
     height: 120px;
 }
 
-.workspace-inputs {
+.image2 {
+    background-color: rgb(116, 173, 171);
+    width: 90%;
+    height: 100%;
+    box-shadow: 0px 2px 1px 1px black;
+}
+
+.workspace-inputs, .workspaceInstrument-inputs {
     display: flex;
     flex-direction: row;
     justify-content: center;
+    padding: 10px;
     gap: 10px;
+    background-color: lightcoral;
+    border: 1px solid black;
+    box-shadow: 0px 2px 1px 1px black;
+}
+
+.tempo-inputs, .beats-inputs, .counts-inputs, .instruments-inputs {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
 footer {
@@ -88,11 +106,19 @@ footer {
     align-items: baseline;
     padding-top: 10px;
     padding-bottom: 10px;
+    padding-left: 25vw;
+    padding-right: 25vw;
     background-color: lightseagreen;
 }
 
-.kit-dropdown, .saveload-buttons {
-    flex-basis: 200px;
+.kits-dropdown, .saveload-buttons {
+    flex-basis: 120px;
+}
+
+.saveload-buttons {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
 }
 
 .playstop-buttons {
@@ -113,10 +139,15 @@ footer {
 .instruments-container, .controls-container {
     display: flex;
     flex-direction: row;
-    justify-content: center;
-    flex-basis: 200px;
+    justify-content: space-between;
+    flex-basis: 170px;
     margin-top: 3px;
     margin-bottom: 3px;
+}
+
+.dropdowns-container {
+    display: flex;
+    flex-direction: column;
 }
 
 .beats-container {
@@ -150,7 +181,7 @@ footer {
     margin-bottom: 3px;
 }
 
-.beat {
+.note {
     outline: 1px solid black;
     background-color: mistyrose;
     width: 20px;
@@ -158,36 +189,38 @@ footer {
     min-width: 20px;
 }
 
-.beat:hover {
-    background-color: orange;
+.note:hover {
+    background-color: hotpink;
     cursor: pointer;
     font-size: 18px;
     z-index: 1;
     color: white;
-    box-shadow: 0px 0px 4px 2px orange;
+    box-shadow: 0px 0px 0px 2px black;
 }
 
 .onBeat {
-    background-color: lightcoral;
+    background-color: rgb(255, 96, 96);
     width: auto;
     min-width: 20px;
+    outline: 1px solid black;
 }
 
 .onCount {
-    background-color: peachpuff;
+    background-color: rgb(224, 197, 137);
     width: auto;
     min-width: 20px;
+    outline: 1px solid black;
 }
 
-.beat:nth-child(even) {
+.note:nth-child(even) {
     background-color: rgb(235, 184, 179) !important;
 }
 
-.beat:hover:nth-child(even) {
-    background-color: orange !important;
+.note:hover:nth-child(even) {
+    background-color: hotpink !important;
     color: white;
 }
 
-.beat[checked='true'] {
+.note[checked='true'] {
     background-color: lightgreen !important;
 }

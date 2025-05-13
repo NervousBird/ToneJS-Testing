@@ -70,46 +70,72 @@ document.querySelector('#play').addEventListener('click', async () => {
 //     sampler.triggerAttackRelease(['C5'],1);
 // })
 
+const $playing = false;
 
+let $playingInterval;
+let $counter = 0;
+
+const $kit1 = [];
+const $kit1Preload = [];
+
+let $beatsArray = [];
+
+
+
+// let $instrumentDropdownElement = `<div class="instrument-dropdown">
+//                         <button id="instrument${num}" class="instrument-dropdown">${kitPreload[index]}</button>
+//                         <div class="dropdown-content instrument-choice">
+//                             ${instrumentDropdownKit}
+//                         </div>
+//                     </div>`;
+
+// let $instrumentDropdownKit = `<a href="#" class="instrument">${kit[index]}</a>`;
+
+// let $closeButton = `<div class="remove-button"><i class="bi bi-x-octagon-fill"></i></div>`;
+
+
+
+
+// Buttons
+
+// Play/Pause/Stop
 document.querySelector('#play').addEventListener('click', event => {
+    if(!$playing) {
 
+    };
+})
+
+document.querySelector('#pause').addEventListener('click', event => {
+    if($playing) {
+
+    };
 })
 
 document.querySelector('#stop').addEventListener('click', event => {
+    if($playing) {
 
+    };
 })
 
-const playLoop = () => {
-    let beatColumns = Array.from(document.querySelector('.beats-container').children);
-    beatColumns.forEach(column => {
-        column.forEach(beat => {
-            if(beat.getAttribute("checked")){
-                
-            }
-        })
-    })
-}
-
-const toggleBeats = togglebeats => {
-    const beats = document.querySelectorAll('.beat');
-    beats.forEach(beat => {
-        beatToggleEvent(beat);
+// Beats Interaction
+const toggleNotes = () => { // <<== Un-needed when generating beats
+    const notes = document.querySelectorAll('.note');
+    notes.forEach(note => {
+        noteToggleEvent(note);
     });
 }
 
-const beatToggleEvent = beat => {
-    beat.addEventListener('click', event => {
-        if(beat.getAttribute('checked') == 'true') {
-            beat.setAttribute('checked', 'false');
+const noteToggleEvent = note => {
+    note.addEventListener('click', event => {
+        if(note.getAttribute('checked') == 'true') {
+            note.setAttribute('checked', 'false');
         } else {
-            beat.setAttribute('checked', 'true');
+            note.setAttribute('checked', 'true');
         };
     });
 }
 
-toggleBeats();
-
-
+toggleNotes();
 
 // Kits Dropdown
 document.getElementById('kits').addEventListener('click', event => {
@@ -125,9 +151,113 @@ document.addEventListener('click', event => {
 })
 
 document.querySelectorAll('.kit').forEach(option => {
-    console.log(option);
     option.addEventListener('click', event => {
         document.getElementById('kits').innerHTML = event.target.innerHTML;
     })
 })
 
+// Instruments Dropdown
+const instrumentDropDown = (button) => {
+    let dropdown = button.parentElement.querySelector('.instrument-choice');
+    button.addEventListener('click', event => {
+        dropdown.style.display = 'grid';
+        event.stopPropagation();
+    });
+    document.addEventListener('click', event => {
+        if(dropdown.style.display = 'grid') {
+            dropdown.style.display = 'none';
+        };
+    });
+    dropdown.querySelectorAll('.instrument').forEach(option => {
+        option.addEventListener('click', event => {
+            button.innerHTML = event.target.innerHTML;
+        });
+    });
+}
+
+
+
+const kit = ['Instrument 1', 'Instrument 2', 'Instrument 3', 'Instrument 4', 'Instrument 5', 'Instrument 6', 'Instrument 7'];
+const preload = ['Instrument 1', 'Instrument 2', 'Instrument 3'];
+
+// Workspace Generator
+
+const loadInstrumentDropdowns = (kit, preload, num) => {
+    let instrumentDropdownKit = '';
+    for(let i = 0; i < kit.length; i++) {
+        instrumentDropdownKit += `<a href="#" class="instrument">${kit[i]}</a>`;
+    };
+    let instrumentDropdownElement = `<div class="instrument-dropdown">
+                            <button id="instrument${num}" class="instrument-dropdown">${preload[num]}</button>
+                            <div class="dropdown-content instrument-choice">
+                                ${instrumentDropdownKit}
+                            </div>
+                        </div>`;
+    document.querySelector('.dropdowns-container').innerHTML += instrumentDropdownElement;
+}
+
+const loadRowDeleteButtons = () => {
+
+}
+
+const loadVolumeControls = () => {
+    let volumeElement = `<input class='volume' type="range" min="0" max="100">`;
+    document.querySelector('.volumes-container').innerHTML += volumeElement;
+}
+
+const loadPitchControls = () => {
+    let volumeElement = `<input class='pitch' type="range" min="0" max="100">`;
+    document.querySelector('.pitches-container').innerHTML += volumeElement;
+}
+
+const loadBeats = () => {
+    let beatColumn = `<div class="beatCol">
+                    <p class="onBeat">${num}</p>`
+}
+
+const loadCounts = () => {
+    let countColumn = `<div class="countCol">
+                    <p class="onCount">.</p>`
+}
+
+const loadNote = () => {
+    let noteElement = `<div class="note">${note}</div>`
+}
+
+
+const createWorkspace = () => {
+    let beatsNumber = document.getElementById('beatsInput').value;
+    let countsNumber = document.getElementById('countsInput').value;
+
+    
+}
+
+
+// For testing
+loadInstrumentDropdowns(kit, preload, 0); // < do ALL of these before running through and adding the event listeners
+loadInstrumentDropdowns(kit, preload, 1);
+loadInstrumentDropdowns(kit, preload, 2);
+
+instrumentDropDown(document.getElementById('instrument0'));
+instrumentDropDown(document.getElementById('instrument1'));
+instrumentDropDown(document.getElementById('instrument2'));
+
+loadVolumeControls();
+loadVolumeControls();
+loadVolumeControls();
+
+loadPitchControls();
+loadPitchControls();
+loadPitchControls();
+
+// Play Functions
+const playLoop = () => {
+    let beatColumns = Array.from(document.querySelector('.beats-container').children);
+    beatColumns.forEach(column => {
+        column.forEach(beat => {
+            if(beat.getAttribute("checked")){
+                synth.triggerAttackRelease("C4", "8n");
+            };
+        });
+    });
+}
