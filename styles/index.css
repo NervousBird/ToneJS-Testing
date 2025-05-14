@@ -150,6 +150,11 @@ footer {
     flex-direction: column;
 }
 
+.close-container {
+    display: flex;
+    flex-direction: column;
+}
+
 .beats-container {
     display: flex;
     flex-direction: row;

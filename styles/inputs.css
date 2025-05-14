@@ -34,7 +34,6 @@ input[type='range'] {
     background: transparent;
     height: 10px;
     max-width: 80px;
-    min-width: none;
 }
 
 /***** Chrome, Safari, Opera, and Edge Chromium *****/

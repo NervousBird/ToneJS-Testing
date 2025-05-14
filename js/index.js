@@ -175,20 +175,62 @@ const instrumentDropDown = (button) => {
     });
 }
 
+// Delete Row Button
+const removeButtonEvent = () => {
+    let removeButtonArray = document.querySelectorAll('.remove-button');
+    removeButtonArray.forEach(button => {
+        button.addEventListener('click', event => {
+            deleteRow(event.target);
+        });
+    });
+}
 
+const updateRemoveButtonIndex = () => {
+    let removeButtonArray = document.querySelectorAll('.remove-button');
+    removeButtonArray.forEach((button, index) => {
+        button.setAttribute('num', index + 1);
+    });
+}
 
+const deleteRow = (button) => {
+    let index = button.getAttribute('num');
+    let beatColumns = Array.from(document.querySelector('.beats-container').children);
+    let beatInstrument = Array.from(document.querySelector('.dropdowns-container').children);
+    let beatVolume = Array.from(document.querySelector('.volumes-container').children);
+    let beatPitch = Array.from(document.querySelector('.pitches-container').children);
+    removeRow(beatColumns, index, true);
+    removeRow(beatInstrument, index, false);
+    removeRow(beatVolume, index, false);
+    removeRow(beatPitch, index, false);
+    button.remove();
+    updateRemoveButtonIndex();
+}
+
+const removeRow = (array, index, type) => {
+    if(type) {
+        array.forEach(column => {
+            column.children[index].remove();
+        });
+    } else {
+        array[index].remove()
+    };
+}
+
+// KITS
 const kit = ['Instrument 1', 'Instrument 2', 'Instrument 3', 'Instrument 4', 'Instrument 5', 'Instrument 6', 'Instrument 7'];
 const preload = ['Instrument 1', 'Instrument 2', 'Instrument 3'];
 
 // Workspace Generator
-
 const loadInstrumentDropdowns = (kit, preload, num) => {
     let instrumentDropdownKit = '';
     for(let i = 0; i < kit.length; i++) {
         instrumentDropdownKit += `<a href="#" class="instrument">${kit[i]}</a>`;
     };
+    if(preload[num] == undefined) {
+        preload[num] = 'Empty';
+    };
     let instrumentDropdownElement = `<div class="instrument-dropdown">
-                            <button id="instrument${num}" class="instrument-dropdown">${preload[num]}</button>
+                            <button id="instrument${num}" class="instrument-dropdown instrument-dropdown-button">${preload[num]}</button>
                             <div class="dropdown-content instrument-choice">
                                 ${instrumentDropdownKit}
                             </div>
@@ -197,7 +239,8 @@ const loadInstrumentDropdowns = (kit, preload, num) => {
 }
 
 const loadRowDeleteButtons = () => {
-
+    let removeButtonElement = `<i class="bi bi-x-octagon-fill remove-button" num=""></i>`;
+    document.querySelector('.close-container').innerHTML += removeButtonElement;
 }
 
 const loadVolumeControls = () => {
@@ -220,7 +263,7 @@ const loadCounts = () => {
                     <p class="onCount">.</p>`
 }
 
-const loadNote = () => {
+const loadNotes = () => {
     let noteElement = `<div class="note">${note}</div>`
 }
 
@@ -232,23 +275,53 @@ const createWorkspace = () => {
     
 }
 
+// Changing Instruments, Beats, Counts
+
+document.querySelector('#instruments').addEventListener('change', event => {
+    let currentInstruments = document.querySelector('.dropdowns-container').children;
+    let count = currentInstruments.length;
+    while(currentInstruments.length - 1 < event.target.value) {
+        loadInstrumentDropdowns(kit, preload, count - 1);
+        loadRowDeleteButtons(count - 1);
+        // loadBeats();
+        // loadCounts();
+        // loadNotes();
+        loadVolumeControls();
+        loadPitchControls();
+        updateRemoveButtonIndex();
+        addDropDownFunctions();
+        removeButtonEvent();
+        count++;
+    };
+    while(currentInstruments.length - 1 > event.target.value) {
+        let button = document.querySelectorAll('.remove-button');
+        deleteRow(button[button.length - 1]);
+    };
+})
+
 
 // For testing
-loadInstrumentDropdowns(kit, preload, 0); // < do ALL of these before running through and adding the event listeners
-loadInstrumentDropdowns(kit, preload, 1);
-loadInstrumentDropdowns(kit, preload, 2);
+const loadWorkspaceTemp = () => {
+    for(let i = 0; i < 7; i++) {
+        loadInstrumentDropdowns(kit, preload, i);
+        loadRowDeleteButtons(i);
+        loadVolumeControls();
+        loadPitchControls();
+        updateRemoveButtonIndex()
+    };
+}
 
-instrumentDropDown(document.getElementById('instrument0'));
-instrumentDropDown(document.getElementById('instrument1'));
-instrumentDropDown(document.getElementById('instrument2'));
+const addDropDownFunctions = () => {
+    document.querySelectorAll('.instrument-dropdown-button').forEach(button => {
+        instrumentDropDown(button);
+    });
+}
 
-loadVolumeControls();
-loadVolumeControls();
-loadVolumeControls();
+loadWorkspaceTemp();
+addDropDownFunctions();
+removeButtonEvent(); // << Making new delete buttons needs to remove ALL the delete buttons
 
-loadPitchControls();
-loadPitchControls();
-loadPitchControls();
+// console.log(document.querySelectorAll('.remove-button'));
 
 // Play Functions
 const playLoop = () => {
