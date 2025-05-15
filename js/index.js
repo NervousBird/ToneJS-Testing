@@ -3,13 +3,16 @@
 //create a synth and connect it to the main output (your speakers)
 const synth = new Tone.Synth().toDestination();
 
+async() => {
+    await Tone.start();
+}
 
 // Test Button
-document.querySelector('#play').addEventListener('click', async () => {
-    await Tone.start();
-    console.log('tone started');
-    synth.triggerAttackRelease("C4", "8n");
-})
+// document.querySelector('#play').addEventListener('click', async () => {
+//     await Tone.start();
+//     console.log('tone started');
+//     synth.triggerAttackRelease("C4", "8n");
+// })
 
 // document.querySelector('#test').addEventListener('click', event => {
 //     synth.triggerAttackRelease("C4", "8n");
@@ -38,16 +41,16 @@ document.querySelector('#play').addEventListener('click', async () => {
 // // 	player.start();
 // // });
 
-// const sampler = new Tone.Sampler({
-// 	urls: {
-// 		C4: "C4.mp3",
-// 		"D#4": "Ds4.mp3",
-// 		"F#4": "Fs4.mp3",
-// 		A4: "A4.mp3",
-// 	},
-// 	release: 1,
-// 	baseUrl: "https://tonejs.github.io/audio/salamander/",
-// }).toDestination();
+const sampler = new Tone.Sampler({
+	urls: {
+		C4: "C4.mp3",
+		"D#4": "Ds4.mp3",
+		"F#4": "Fs4.mp3",
+		A4: "A4.mp3",
+	},
+	release: 1,
+	baseUrl: "https://tonejs.github.io/audio/salamander/",
+}).toDestination();
 
 
 // document.querySelector('#button1').addEventListener('click', event => {
@@ -70,50 +73,50 @@ document.querySelector('#play').addEventListener('click', async () => {
 //     sampler.triggerAttackRelease(['C5'],1);
 // })
 
-const $playing = false;
+let $playing = false;
 
 let $playingInterval;
 let $counter = 0;
 
-const $kit1 = [];
-const $kit1Preload = [];
+const beatContainer = document.querySelector('.beats-container');
+const instrumentSet = document.getElementById('kits');
+
+// KITS
+const kit = ['Instrument 1', 'Instrument 2', 'Instrument 3', 'Instrument 4', 'Instrument 5', 'Instrument 6', 'Instrument 7'];
+const preload = ['Instrument 1', 'Instrument 2', 'Instrument 3', 'Instrument 4', 'Instrument 5', 'Instrument 6'];
+
+const kitPiano = ['G5', 'F5', 'E5', 'D5', 'C5', 'B4', 'A4', 'G4', 'F4', 'E4', 'D4', 'C4', 'B3', 'A3', 'G3', 'F3', 'E3', 'D3', 'C3', 'B2', 'A2'];
+const kitPianoPreload = ['G5', 'F5', 'E5', 'D5', 'C5', 'B5', 'A5', 'G4', 'F4', 'E4', 'D4', 'C4', 'B4', 'A4', 'G3', 'F3', 'E3', 'D3', 'C3', 'B2', 'A2'];
+
+const kitArrayDict = {
+  "Synth Piano": [kitPiano, kitPianoPreload, 'load sound library?'], 
+  "Basic Set": ['', '', '']
+}
+
+
 
 let $beatsArray = [];
-
-
-
-// let $instrumentDropdownElement = `<div class="instrument-dropdown">
-//                         <button id="instrument${num}" class="instrument-dropdown">${kitPreload[index]}</button>
-//                         <div class="dropdown-content instrument-choice">
-//                             ${instrumentDropdownKit}
-//                         </div>
-//                     </div>`;
-
-// let $instrumentDropdownKit = `<a href="#" class="instrument">${kit[index]}</a>`;
-
-// let $closeButton = `<div class="remove-button"><i class="bi bi-x-octagon-fill"></i></div>`;
-
-
-
 
 // Buttons
 
 // Play/Pause/Stop
 document.querySelector('#play').addEventListener('click', event => {
+    playLoop();
+    console.log('test');
     if(!$playing) {
-
+        // playLoop();
     };
 })
 
 document.querySelector('#pause').addEventListener('click', event => {
     if($playing) {
-
+        stopPlaying();
     };
 })
 
 document.querySelector('#stop').addEventListener('click', event => {
     if($playing) {
-
+        stopPlaying();
     };
 })
 
@@ -153,7 +156,7 @@ document.addEventListener('click', event => {
 document.querySelectorAll('.kit').forEach(option => {
     option.addEventListener('click', event => {
         document.getElementById('kits').innerHTML = event.target.innerHTML;
-    })
+    });
 })
 
 // Instruments Dropdown
@@ -204,6 +207,7 @@ const deleteRow = (button) => {
     removeRow(beatPitch, index, false);
     button.remove();
     updateRemoveButtonIndex();
+    document.getElementById('instruments').value = Array.from(document.querySelector('.dropdowns-container').children).length -1;
 }
 
 const removeRow = (array, index, type) => {
@@ -212,13 +216,19 @@ const removeRow = (array, index, type) => {
             column.children[index].remove();
         });
     } else {
-        array[index].remove()
+        array[index].remove();
     };
 }
 
-// KITS
-const kit = ['Instrument 1', 'Instrument 2', 'Instrument 3', 'Instrument 4', 'Instrument 5', 'Instrument 6', 'Instrument 7'];
-const preload = ['Instrument 1', 'Instrument 2', 'Instrument 3'];
+document.getElementById('overflow').addEventListener('click', event => {
+    beatContainer.style.overflow = 'auto';
+    beatContainer.style.flexWrap = 'nowrap';
+})
+
+document.getElementById('wrap').addEventListener('click', event => {
+    beatContainer.style.overflow = 'none';
+    beatContainer.style.flexWrap = 'wrap';
+})
 
 // Workspace Generator
 const loadInstrumentDropdowns = (kit, preload, num) => {
@@ -253,39 +263,52 @@ const loadPitchControls = () => {
     document.querySelector('.pitches-container').innerHTML += volumeElement;
 }
 
-const loadBeats = () => {
+const loadBeats = (num) => {
     let beatColumn = `<div class="beatCol">
-                    <p class="onBeat">${num}</p>`
+                    <p class="onBeat">${num + 1}</p>`;
+    let instruments = document.querySelector('#instruments').value;
+    for(let i = 0; i < instruments; i++) {
+        beatColumn += `<div class="note" checked="false">${num + 1}</div>`
+    };
+    beatContainer.innerHTML += beatColumn;
+    toggleNotes();
 }
 
 const loadCounts = () => {
     let countColumn = `<div class="countCol">
                     <p class="onCount">.</p>`
+    let instruments = document.querySelector('#instruments').value;
+    for(let i = 0; i < instruments; i++) {
+        countColumn += `<div class="note" checked="false">.</div>`
+    };
+    beatContainer.innerHTML += countColumn;
+    toggleNotes();
 }
 
 const loadNotes = () => {
-    let noteElement = `<div class="note">${note}</div>`
+    let columnsArray = Array.from(beatContainer.children);
+    columnsArray.forEach(column => {
+        let note = column.querySelector('p').innerHTML;
+        column.innerHTML += `<div class="note" checked="false">${note}</div>`;
+    });
+    toggleNotes();
 }
 
-
-const createWorkspace = () => {
-    let beatsNumber = document.getElementById('beatsInput').value;
-    let countsNumber = document.getElementById('countsInput').value;
-
-    
+const loadNoteChecks = (checksArray) => {
+    let notesArray = Array.from(document.querySelectorAll('.note'));
 }
 
 // Changing Instruments, Beats, Counts
-
-document.querySelector('#instruments').addEventListener('change', event => {
+const instrumentUpdater = (event) => {
     let currentInstruments = document.querySelector('.dropdowns-container').children;
     let count = currentInstruments.length;
-    while(currentInstruments.length - 1 < event.target.value) {
+    let kit = kitArrayDict[instrumentSet.innerHTML][0];
+    let preload = kitArrayDict[instrumentSet.innerHTML][0];
+    document.getElementById('instruments').value = preload.length;
+    while(currentInstruments.length - 1 < event) {
         loadInstrumentDropdowns(kit, preload, count - 1);
         loadRowDeleteButtons(count - 1);
-        // loadBeats();
-        // loadCounts();
-        // loadNotes();
+        loadNotes();
         loadVolumeControls();
         loadPitchControls();
         updateRemoveButtonIndex();
@@ -293,21 +316,78 @@ document.querySelector('#instruments').addEventListener('change', event => {
         removeButtonEvent();
         count++;
     };
-    while(currentInstruments.length - 1 > event.target.value) {
+    while(currentInstruments.length - 1 > event) {
         let button = document.querySelectorAll('.remove-button');
         deleteRow(button[button.length - 1]);
     };
+}
+
+const beatUpdater = (event) => {
+    let beatsInput = event;
+    let beatsAmount = beatContainer.querySelectorAll('.beatCol').length;
+    let countsAmount = document.getElementById('countsInput').value;
+    while(beatsAmount < beatsInput) {
+        loadBeats(beatsAmount); // MAKE THE ADDING WORK
+        for(let i = 0; i < countsAmount; i++) {
+            loadCounts();
+        }
+        beatsAmount = beatContainer.querySelectorAll('.beatCol').length;
+    };
+    while(beatsAmount > beatsInput) {
+        beatContainer.lastChild.remove();
+        beatsAmount = beatContainer.querySelectorAll('.beatCol').length;
+    };
+}
+
+const countUpdater = (event) => {
+    let countsAmount = beatContainer.querySelectorAll('.countCol').length;
+    let countColumn = `<div class="countCol">
+                    <p class="onCount">.</p>`
+    let instruments = document.querySelector('#instruments').value;
+    for(let i = 0; i < instruments; i++) {
+        countColumn += `<div class="note" checked="false">.</div>`
+    };
+    let beatColumns = beatContainer.querySelectorAll('.beatCol');
+    console.log(countsAmount, event * document.querySelector('#beatsInput').value);
+    while(countsAmount < event * document.querySelector('#beatsInput').value) {
+        beatColumns.forEach(column => {
+            column.insertAdjacentHTML("afterend", countColumn);
+        });
+        countsAmount = beatContainer.querySelectorAll('.countCol').length;
+    };
+    while(countsAmount > event * document.querySelector('#beatsInput').value) {
+        beatColumns.forEach(column => {
+            column.nextSibling.remove();
+        });
+        countsAmount = beatContainer.querySelectorAll('.countCol').length;
+    };
+    toggleNotes();
+}
+
+document.querySelector('#instruments').addEventListener('change', event => {
+    instrumentUpdater(event.target.value);
+});
+
+document.querySelector('#beatsInput').addEventListener('change', event => {
+    beatUpdater(event.target.value);
+});
+
+document.querySelector('#countsInput').addEventListener('change', event => {
+    countUpdater(event.target.value);
 })
 
-
 // For testing
-const loadWorkspaceTemp = () => {
-    for(let i = 0; i < 7; i++) {
+const loadWorkspace = () => {
+    let kit = kitArrayDict[instrumentSet.innerHTML][0];
+    let preload = kitArrayDict[instrumentSet.innerHTML][0];
+    document.getElementById('instruments').value = preload.length;
+    for(let i = 0; i < document.getElementById('instruments').value; i++) {
         loadInstrumentDropdowns(kit, preload, i);
         loadRowDeleteButtons(i);
         loadVolumeControls();
         loadPitchControls();
-        updateRemoveButtonIndex()
+        updateRemoveButtonIndex();
+        beatUpdater(document.querySelector('#beatsInput').value);
     };
 }
 
@@ -317,20 +397,52 @@ const addDropDownFunctions = () => {
     });
 }
 
-loadWorkspaceTemp();
+loadWorkspace();
 addDropDownFunctions();
 removeButtonEvent(); // << Making new delete buttons needs to remove ALL the delete buttons
 
-// console.log(document.querySelectorAll('.remove-button'));
-
 // Play Functions
 const playLoop = () => {
-    let beatColumns = Array.from(document.querySelector('.beats-container').children);
-    beatColumns.forEach(column => {
-        column.forEach(beat => {
-            if(beat.getAttribute("checked")){
-                synth.triggerAttackRelease("C4", "8n");
-            };
-        });
+    let timer = 60000 / (document.getElementById('tempo').value * document.getElementById('countsInput').value);
+    let columnsToPlay = parseInt(document.getElementById('beatsInput').value) * (parseInt(document.getElementById('countsInput').value) + 1);
+    let beatColumns = Array.from(beatContainer.children);
+    let instruments = Array.from(document.querySelectorAll('.instrument-dropdown-button'));
+
+    $playingInterval = setInterval(function() {playNote(beatColumns, columnsToPlay, instruments)}, timer);
+    $playing = true;
+}
+
+const playNote = (notesArray, toPlay, instruments) => {
+    let notes = Array.from(notesArray[$counter].children);
+
+    notes.forEach((note, index) => {
+        if(note.getAttribute('play') == 'true') {
+            note.setAttribute('play', 'false');
+        } else {
+            note.setAttribute('play', 'true');
+        };
+        if(note.getAttribute('checked') == 'true') {
+            console.log(instruments[index-1].innerHTML);
+            sampler.triggerAttackRelease([instruments[index - 1].innerHTML], 1);
+        };
     });
+
+    $counter += 1;
+    if($counter == toPlay) {
+        $counter = 0;
+    };
+}
+
+const stopPlaying = () => {
+    clearInterval($playingInterval);
+    resetNotes();
+    $playing = false;
+}
+
+const resetNotes = () => {
+    let notes = Array.from(document.querySelectorAll('.note,.onBeat,.onCount'));
+    notes.forEach(note => {
+      note.setAttribute('play', 'false');
+    });
+    $counter = 0;
 }

@@ -80,6 +80,7 @@ body {
     background-color: lightcoral;
     border: 1px solid black;
     box-shadow: 0px 2px 1px 1px black;
+    border-radius: 2px;
 }
 
 .tempo-inputs, .beats-inputs, .counts-inputs, .instruments-inputs {
@@ -99,15 +100,28 @@ footer {
 }
 
 /* WORKSPACE TITLE STYLE */
-.workspace-title-container {
+.workspace-title-container  {
     display: flex;
     flex-direction: row;
     justify-content: space-around;
     align-items: baseline;
-    padding-top: 10px;
-    padding-bottom: 10px;
+    padding-top: 5px;
+    padding-bottom: 5px;
     padding-left: 25vw;
     padding-right: 25vw;
+    background-color: lightseagreen;
+}
+
+.layout-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: baseline;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    padding-left: 25vw;
+    padding-right: 25vw;
+    gap: 20px;
     background-color: lightseagreen;
 }
 
@@ -158,10 +172,18 @@ footer {
 .beats-container {
     display: flex;
     flex-direction: row;
-    justify-content: center;
+    /* justify-content: left; */
     flex-basis: auto;
     flex-wrap: wrap;
+    overflow: none;
+    padding-left: 2px;
+    padding-right: 2px;
+
+    scrollbar-color: lightcoral #053a5f;
+    scrollbar-width: thin;
 }
+
+
 
 .remove-button {
     background-color: none;
@@ -228,4 +250,17 @@ footer {
 
 .note[checked='true'] {
     background-color: lightgreen !important;
+}
+
+.note[play='true'] {
+    outline: 2px solid green !important;
+    /* background-color: hotpink !important; */
+    width: 20px;
+    height: 20px;
+    min-width: 20px;
+}
+
+.onBeat[play='true'], .onCount[play='true'] {
+    outline: 2px solid green;
+    /* background-color: hotpink; */
 }

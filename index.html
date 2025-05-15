@@ -20,7 +20,7 @@
                 <div class="workspaceInstrument-inputs">
                     <div class="instruments-inputs">
                         <label for="instruments">Instruments</label>
-                        <input type="number" id="instruments" value="6">
+                        <input type="number" id="instruments" value="6" min="0" max="100">
                     </div>
                 </div>
             </div>
@@ -31,15 +31,15 @@
                 <div class="workspace-inputs">
                     <div class="tempo-inputs">
                       <label for="tempo">Tempo</label>
-                      <input type="number" id="tempo" value="140">
+                      <input type="number" id="tempo" value="140" min="1" max="999">
                     </div>
                     <div class="beats-inputs">
                       <label for="beatsInput">Beats</label>
-                      <input type="number" id="beatsInput" value="8">
+                      <input type="number" id="beatsInput" value="8" min="0" max="100">
                     </div>
                     <div class="counts-inputs">
                       <label for="countsInput">Counts</label>
-                      <input type="number" id="countsInput" value="3" disabled>  
+                      <input type="number" id="countsInput" value="3" min="0" max="100">  
                     </div>
                 </div>
             </div>
@@ -54,23 +54,27 @@
         </div>
         <div class="workspace-title-container">
             <div class="kits-dropdown">
-                <button id="kits" class="kit-dropdown">Kits</button>
+                <button id="kits" class="kit-dropdown">Synth Piano</button>
                 <div class="dropdown-content kit-choice">
-                    <a href="#" class="kit">Kit 1</a>
+                    <a href="#" class="kit">Synth Piano</a>
                     <a href="#" class="kit">Kit 2</a>
                     <a href="#" class="kit">Kit 3</a>
                 </div>
             </div>
             <div class="playstop-buttons">
                 <button class="btn-icon" id="play"><i class="bi bi-play-fill"></i></button>
-                <button class="btn-icon" id="pause" disabled><i class="bi bi-pause-fill"></i></button>
-                <button class="btn-icon" id="stop" disabled><i class="bi bi-stop-fill"></i></button>
+                <button class="btn-icon" id="pause"><i class="bi bi-pause-fill"></i></button>
+                <button class="btn-icon" id="stop"><i class="bi bi-stop-fill"></i></button>
             </div>
             <div class="saveload-buttons">
                 <button class="btn-icon" id="save"><i class="bi bi-floppy"></i></button>
-                <button class="btn-icon" id="save"><i class="bi bi-floppy"></i></button>
-                <button class="btn-icon" id="laod"><i class="bi bi-file-arrow-up"></i></button>
+                <button class="btn-icon" id="savetxt"><i class="bi bi-file-arrow-up"></i></button>
+                <button class="btn-icon" id="load"><i class="bi bi-file-earmark-arrow-down"></i></i></button>
             </div>
+        </div>
+        <div class="layout-container">
+            <button class="btn-icon-small" id="overflow"><i class="bi bi-view-list"></i></button>
+            <button class="btn-icon-small" id="wrap"><i class="bi bi-view-stacked"></i></button>
         </div>
         <div class="workspace">
             <div class="instruments-container">
@@ -82,166 +86,7 @@
                 </div>
             </div>
             <div class="beats-container">
-                <div class="beatCol">
-                    <p class="onBeat">1</p>
-                    <div class="note">1</div>
-                    <div class="note">1</div>
-                    <div class="note">1</div>
-                    <div class="note">1</div>
-                    <div class="note">1</div>
-                    <div class="note">1</div>
-                    <div class="note">1</div>
-                </div>
-                <div class="countCol">
-                    <p class="onCount">.</p>
-                    <div class="note">.</div>
-                    <div class="note">.</div>
-                    <div class="note">.</div>
-                    <div class="note">.</div>
-                    <div class="note">.</div>
-                    <div class="note">.</div>
-                    <div class="note">.</div>
-                </div>
-                <div class="countCol">
-                    <p class="onCount">.</p>
-                    <div class="note">.</div>
-                    <div class="note">.</div>
-                    <div class="note">.</div>
-                    <div class="note">.</div>
-                    <div class="note">.</div>
-                    <div class="note">.</div>
-                    <div class="note">.</div>
-                </div>
-                <div class="countCol">
-                    <p class="onCount">.</p>
-                    <div class="note">.</div>
-                    <div class="note">.</div>
-                    <div class="note">.</div>
-                    <div class="note">.</div>
-                    <div class="note">.</div>
-                    <div class="note">.</div>
-                    <div class="note">.</div>
-                </div>
-                <div class="beatCol">
-                    <p class="onBeat">2</p>
-                    <div class="note">2</div>
-                    <div class="note">2</div>
-                    <div class="note">2</div>
-                    <div class="note">2</div>
-                    <div class="note">2</div>
-                    <div class="note">2</div>
-                    <div class="note">2</div>
-                </div>
-                <div class="countCol">
-                    <p class="onCount">.</p>
-                    <div class="note">.</div>
-                    <div class="note">.</div>
-                    <div class="note">.</div>
-                    <div class="note">.</div>
-                    <div class="note">.</div>
-                    <div class="note">.</div>
-                    <div class="note">.</div>
-                </div>
-                <div class="countCol">
-                    <p class="onCount">.</p>
-                    <div class="note">.</div>
-                    <div class="note">.</div>
-                    <div class="note">.</div>
-                    <div class="note">.</div>
-                    <div class="note">.</div>
-                    <div class="note">.</div>
-                    <div class="note">.</div>
-                </div>
-                <div class="countCol">
-                    <p class="onCount">.</p>
-                    <div class="note">.</div>
-                    <div class="note">.</div>
-                    <div class="note">.</div>
-                    <div class="note">.</div>
-                    <div class="note">.</div>
-                    <div class="note">.</div>
-                    <div class="note">.</div>
-                </div>
-                <div class="beatCol">
-                    <p class="onBeat">3</p>
-                    <div class="note">3</div>
-                    <div class="note">3</div>
-                    <div class="note">3</div>
-                    <div class="note">3</div>
-                    <div class="note">3</div>
-                    <div class="note">3</div>
-                    <div class="note">3</div>
-                </div>
-                <div class="countCol">
-                    <p class="onCount">.</p>
-                    <div class="note">.</div>
-                    <div class="note">.</div>
-                    <div class="note">.</div>
-                    <div class="note">.</div>
-                    <div class="note">.</div>
-                    <div class="note">.</div>
-                    <div class="note">.</div>
-                </div>
-                <div class="countCol">
-                    <p class="onCount">.</p>
-                    <div class="note">.</div>
-                    <div class="note">.</div>
-                    <div class="note">.</div>
-                    <div class="note">.</div>
-                    <div class="note">.</div>
-                    <div class="note">.</div>
-                    <div class="note">.</div>
-                </div>
-                <div class="countCol">
-                    <p class="onCount">.</p>
-                    <div class="note">.</div>
-                    <div class="note">.</div>
-                    <div class="note">.</div>
-                    <div class="note">.</div>
-                    <div class="note">.</div>
-                    <div class="note">.</div>
-                    <div class="note">.</div>
-                </div>
-                <div class="beatCol">
-                    <p class="onBeat">4</p>
-                    <div class="note">4</div>
-                    <div class="note">4</div>
-                    <div class="note">4</div>
-                    <div class="note">4</div>
-                    <div class="note">4</div>
-                    <div class="note">4</div>
-                    <div class="note">4</div>
-                </div>
-                <div class="countCol">
-                    <p class="onCount">.</p>
-                    <div class="note">.</div>
-                    <div class="note">.</div>
-                    <div class="note">.</div>
-                    <div class="note">.</div>
-                    <div class="note">.</div>
-                    <div class="note">.</div>
-                    <div class="note">.</div>
-                </div>
-                <div class="countCol">
-                    <p class="onCount">.</p>
-                    <div class="note">.</div>
-                    <div class="note">.</div>
-                    <div class="note">.</div>
-                    <div class="note">.</div>
-                    <div class="note">.</div>
-                    <div class="note">.</div>
-                    <div class="note">.</div>
-                </div>
-                <div class="countCol">
-                    <p class="onCount">.</p>
-                    <div class="note">.</div>
-                    <div class="note">.</div>
-                    <div class="note">.</div>
-                    <div class="note">.</div>
-                    <div class="note">.</div>
-                    <div class="note">.</div>
-                    <div class="note">.</div>
-                </div>
+
             </div>
             <div class="controls-container">
                 <div class="volumes-container">
