@@ -11,6 +11,18 @@
     align-items: center;
 }
 
+.effects-container-main {
+    position: relative;
+    display: inline-block;
+    max-width: 100%;
+}
+
+.effect-dropdown {
+    height: 20px;
+    width: 102px;
+    align-items: center;
+}
+
 .dropdown-content {
     display: none;
     position: absolute;

@@ -1,47 +1,42 @@
-// import * as Tone from "tone";
 
 //create a synth and connect it to the main output (your speakers)
-const synth = new Tone.Synth().toDestination();
-
 async() => {
     await Tone.start();
 }
 
-// Test Button
-// document.querySelector('#play').addEventListener('click', async () => {
-//     await Tone.start();
-//     console.log('tone started');
-//     synth.triggerAttackRelease("C4", "8n");
-// })
+// Effects
+let distortion = new Tone.Distortion(0.8).toMaster();
+let phaser = new Tone.Phaser({
+    "frequency" : 15,
+    "octaves" : 5,
+    "baseFrequency" : 1000
+}).toMaster();
+// (frequency, delayTime, depth)
+let chorus = new Tone.Chorus(4, 2.5, 0.5).toMaster();
+// (baseFrequency, octaves, sensitivity)
+let autoWah = new Tone.AutoWah(50, 6, -30).toMaster();
+//Q value influences the effect of the wah - default is 2
+autoWah.Q.value = 6;
+let freeverb = new Tone.Freeverb().toMaster();
+freeverb.dampening.value = 1000;
 
-// document.querySelector('#test').addEventListener('click', event => {
-//     synth.triggerAttackRelease("C4", "8n");
-// })
 
-// // create two monophonic synths
-// const synthA = new Tone.FMSynth().toDestination();
-// const synthB = new Tone.AMSynth().toDestination();
-// //play a note every quarter-note
-// const loopA = new Tone.Loop((time) => {
-// 	synthA.triggerAttackRelease("C2", "8n", time);
-// }, "4n").start(0);
-// //play another note every off quarter-note, by starting it "8n"
-// const loopB = new Tone.Loop((time) => {
-// 	synthB.triggerAttackRelease("C4", "8n", time);
-// }, "4n").start("8n");
-// // all loops start when the Transport is started
-// Tone.getTransport().start();
-// // ramp up to 800 bpm over 10 seconds
-// Tone.getTransport().bpm.rampTo(800, 10);
+const effectsLibrary = {
+    "None" : "none",
+    "Distortion": distortion,
+    "Phaser" : phaser,
+    "Chorus": chorus,
+    "Auto-Wah" : autoWah,
+    "Reverb" : freeverb
+}
 
-// // const player = new Tone.Player(
-// // 	"https://tonejs.github.io/audio/berklee/gong_1.mp3"
-// // ).toDestination();
-// // Tone.loaded().then(() => {
-// // 	player.start();
-// // });
+// Synths and sounds
+let volumeNum = 12;
+let volume = new Tone.Volume(volumeNum);
 
-const sampler = new Tone.Sampler({
+const polySynth = new Tone.PolySynth().toDestination();
+
+const pianoSampler = new Tone.Sampler({
 	urls: {
 		C4: "C4.mp3",
 		"D#4": "Ds4.mp3",
@@ -53,26 +48,7 @@ const sampler = new Tone.Sampler({
 }).toDestination();
 
 
-// document.querySelector('#button1').addEventListener('click', event => {
-//     sampler.triggerAttackRelease(['C4'],1);
-// })
-
-// document.querySelector('#button2').addEventListener('click', event => {
-//     sampler.triggerAttackRelease(['E4'],1);
-// })
-
-// document.querySelector('#button3').addEventListener('click', event => {
-//     sampler.triggerAttackRelease(['G4'],1);
-// })
-
-// document.querySelector('#button4').addEventListener('click', event => {
-//     sampler.triggerAttackRelease(['B4'],1);
-// })
-
-// document.querySelector('#button5').addEventListener('click', event => {
-//     sampler.triggerAttackRelease(['C5'],1);
-// })
-
+// Initialise variables
 let $playing = false;
 
 let $playingInterval;
@@ -89,20 +65,20 @@ const kitPiano = ['B6', 'A#6', 'A6', 'G#6', 'G6', 'F#6', 'F6', 'E6', 'D#6', 'D6'
 const kitPianoPreload = ['B6', 'A#6', 'A6', 'G#6', 'G6', 'F#6', 'F6', 'E6', 'D#6', 'D6', 'C#6', 'C6', 'B5', 'A#5', 'A5', 'G#5', 'G5', 'F#5', 'F5', 'E5', 'D#5', 'D5', 'C#5', 'C5', 'B4', 'A#4', 'A4', 'G#4', 'G4', 'F#4', 'F4', 'E4', 'D#4', 'D4', 'C#4', 'C4', 'B3', 'A#3', 'A3', 'G#3', 'G3', 'F#3', 'F3', 'E3', 'D#3', 'D3', 'C#3', 'C3', 'B2', 'A#2', 'A2', 'G#2', 'G2', 'F#2', 'F2', 'E2', 'D#2', 'D2', 'C#2', 'C2', 'B1', 'A#1', 'A1', 'G#1', 'G1', 'F#1', 'F1', 'E1', 'D#1', 'D1', 'C#1', 'C1'];
 
 const kitArrayDict = {
-  "Synth Piano": [kitPiano, kitPianoPreload, 'load sound library?'], 
-  "Basic Set": ['', '', '']
+  "Piano": [kitPiano, kitPianoPreload, pianoSampler], 
+  "Synth Piano": [kitPiano, kitPianoPreload, polySynth]
 }
-
 
 
 let $beatsArray = [];
 
 // Buttons
 
+
+
 // Play/Pause/Stop
 document.querySelector('#play').addEventListener('click', event => {
     playLoop();
-    console.log('test');
     if(!$playing) {
         // playLoop();
     };
@@ -164,6 +140,25 @@ document.querySelectorAll('.kit').forEach(option => {
     });
 })
 
+// Effects Dropdown
+document.getElementById('effects').addEventListener('click', event => {
+    document.querySelector('.effect-choice').style.display = 'grid';
+    event.stopPropagation();
+})
+
+document.addEventListener('click', event => {
+    let dropdown = document.querySelector('.effect-choice')
+    if(dropdown.style.display = 'grid') {
+        dropdown.style.display = 'none';
+    };
+})
+
+document.querySelectorAll('.effect').forEach(option => {
+    option.addEventListener('click', event => {
+        document.getElementById('effects').innerHTML = event.target.innerHTML;
+    });
+})
+
 // Instruments Dropdown
 const instrumentDropDown = (button) => {
     let dropdown = button.parentElement.querySelector('.instrument-choice');
@@ -206,10 +201,12 @@ const deleteRow = (button) => {
     let beatInstrument = Array.from(document.querySelector('.dropdowns-container').children);
     let beatVolume = Array.from(document.querySelector('.volumes-container').children);
     let beatPitch = Array.from(document.querySelector('.pitches-container').children);
+    let noteLength = Array.from(document.querySelector('.length-container').children);
     removeRow(beatColumns, index, true);
     removeRow(beatInstrument, index, false);
     removeRow(beatVolume, index, false);
     removeRow(beatPitch, index, false);
+    removeRow(noteLength, index, false);
     button.remove();
     updateRemoveButtonIndex();
     document.getElementById('instruments').value = Array.from(document.querySelector('.dropdowns-container').children).length -1;
@@ -253,19 +250,34 @@ const loadInstrumentDropdowns = (kit, preload, num) => {
     document.querySelector('.dropdowns-container').innerHTML += instrumentDropdownElement;
 }
 
+const loadEffectsDropdowns = () => {
+    let effectDropdownElement = `<div class="effect-dropdown">
+                            <button id="effect" class="effect-dropdown effect-dropdown-button">${preload[num]}</button>
+                            <div class="dropdown-content effect-choice">
+                                ${effectDropdownKit}
+                            </div>
+                        </div>`;
+    document.querySelector('.dropdowns-container').innerHTML += effectDropdownElement;
+}
+
 const loadRowDeleteButtons = () => {
     let removeButtonElement = `<i class="bi bi-x-octagon-fill remove-button" num=""></i>`;
     document.querySelector('.close-container').innerHTML += removeButtonElement;
 }
 
 const loadVolumeControls = () => {
-    let volumeElement = `<input class='volume' type="range" min="0" max="100">`;
+    let volumeElement = `<input class='volume' type="range" min="-30" max="20" value="-10">`;
     document.querySelector('.volumes-container').innerHTML += volumeElement;
 }
 
 const loadPitchControls = () => {
     let volumeElement = `<input class='pitch' type="range" min="0" max="100">`;
     document.querySelector('.pitches-container').innerHTML += volumeElement;
+}
+
+const loadNoteLengthControls = () => {
+    let lengthElement = `<input class='length' type="number" min="0" max="20" value="0.3">`;
+    document.querySelector('.length-container').innerHTML += lengthElement;
 }
 
 const loadBeats = (num) => {
@@ -312,6 +324,7 @@ const instrumentUpdater = (event) => {
         loadNotes();
         loadVolumeControls();
         loadPitchControls();
+        loadNoteLengthControls();
         updateRemoveButtonIndex();
         addDropDownFunctions();
         removeButtonEvent();
@@ -349,7 +362,6 @@ const countUpdater = (event) => {
         countColumn += `<div class="note" checked="false">.</div>`
     };
     let beatColumns = beatContainer.querySelectorAll('.beatCol');
-    console.log(countsAmount, event * document.querySelector('#beatsInput').value);
     while(countsAmount < event * document.querySelector('#beatsInput').value) {
         beatColumns.forEach(column => {
             column.insertAdjacentHTML("afterend", countColumn);
@@ -387,6 +399,7 @@ const loadWorkspace = () => {
         loadRowDeleteButtons(i);
         loadVolumeControls();
         loadPitchControls();
+        loadNoteLengthControls();
         updateRemoveButtonIndex();
         beatUpdater(document.querySelector('#beatsInput').value);
     };
@@ -408,14 +421,25 @@ const playLoop = () => {
     let columnsToPlay = parseInt(document.getElementById('beatsInput').value) * (parseInt(document.getElementById('countsInput').value) + 1);
     let beatColumns = Array.from(beatContainer.children);
     let instruments = Array.from(document.querySelectorAll('.instrument-dropdown-button'));
+    let volumes = Array.from(document.querySelectorAll('.volume'));
+    let pitches = Array.from(document.querySelectorAll('.pitch'));
+    let noteLength = Array.from(document.querySelectorAll('.length'));
+    let soundSample = kitArrayDict[instrumentSet.innerHTML][2];
+    let effect = effectsLibrary[document.getElementById('effects').innerHTML];
 
-    $playingInterval = setInterval(function() {playNote(beatColumns, columnsToPlay, instruments)}, timer);
+    if(effect == 'none') {
+        // polySynth.disconnect(distortion);
+    } else {
+        polySynth.connect(effect);
+    };
+
+    $playingInterval = setInterval(function() {playNote(beatColumns, columnsToPlay, instruments, soundSample, effect, volumes, noteLength)}, timer);
     $playing = true;
 }
 
-const playNote = (notesArray, toPlay, instruments) => {
+const playNote = (notesArray, toPlay, instruments, soundSample, effect, volumes, noteLength) => {
     let notes = Array.from(notesArray[$counter].children);
-
+    
     notes.forEach((note, index) => {
         if(note.getAttribute('play') == 'true') {
             note.setAttribute('play', 'false');
@@ -423,8 +447,17 @@ const playNote = (notesArray, toPlay, instruments) => {
             note.setAttribute('play', 'true');
         };
         if(note.getAttribute('checked') == 'true') {
-            console.log(instruments[index-1].innerHTML);
-            sampler.triggerAttackRelease([instruments[index - 1].innerHTML], 1);
+            let length = noteLength[index - 1].value;
+            volumeNum = volumes[index - 1].value;
+            // CAN CONNECT EFFECTS HERE
+            // Create a "half note" with a secondary note state, then add a slight delay to it being played below
+            // soundSample.triggerAttackRelease(instruments[index - 1].innerHTML, length).connect(effect).volume.value;
+            // if(effect != 'none') {
+            //     soundSample.connect(effect);
+            //     soundSample.triggerAttackRelease(instruments[index - 1].innerHTML, length);
+            // };
+            soundSample.volume.value = volumeNum;
+            soundSample.triggerAttackRelease(instruments[index - 1].innerHTML, length);
         };
     });
 
@@ -9054,15 +9087,15 @@ const bachPrelude = ["false","false","false","false","false","false","false","fa
 ];
 
 
-let saveFiles = {
-    "Bach Prelude": saveTemp,
-}
-
-// ["InstrumentsNum", "Tempo", "Beats", "Counts", "KitName", "Kit"(available instruments array), "KitPreload"(loaded instruments array), "checksArray"]
-let saveTemp = [72, 50, 20, 5, "SynthPiano",
+// ["InstrumentsNum", "Tempo", "Beats", "Counts", "KitName", [Kit](available instruments array), [KitPreload](loaded instruments array), [checksArray], ** Need to add >> [Volumes], [Pitches], [Lengths], [Effects], {Effects Options (distorion amount, reverb amount ect)} ]
+let saveTemp = [72, 50, 20, 5, "Synth Piano",
     ['B6', 'A#6', 'A6', 'G#6', 'G6', 'F#6', 'F6', 'E6', 'D#6', 'D6', 'C#6', 'C6', 'B5', 'A#5', 'A5', 'G#5', 'G5', 'F#5', 'F5', 'E5', 'D#5', 'D5', 'C#5', 'C5', 'B4', 'A#4', 'A4', 'G#4', 'G4', 'F#4', 'F4', 'E4', 'D#4', 'D4', 'C#4', 'C4', 'B3', 'A#3', 'A3', 'G#3', 'G3', 'F#3', 'F3', 'E3', 'D#3', 'D3', 'C#3', 'C3', 'B2', 'A#2', 'A2', 'G#2', 'G2', 'F#2', 'F2', 'E2', 'D#2', 'D2', 'C#2', 'C2', 'B1', 'A#1', 'A1', 'G#1', 'G1', 'F#1', 'F1', 'E1', 'D#1', 'D1', 'C#1', 'C1'], 
     ['B6', 'A#6', 'A6', 'G#6', 'G6', 'F#6', 'F6', 'E6', 'D#6', 'D6', 'C#6', 'C6', 'B5', 'A#5', 'A5', 'G#5', 'G5', 'F#5', 'F5', 'E5', 'D#5', 'D5', 'C#5', 'C5', 'B4', 'A#4', 'A4', 'G#4', 'G4', 'F#4', 'F4', 'E4', 'D#4', 'D4', 'C#4', 'C4', 'B3', 'A#3', 'A3', 'G#3', 'G3', 'F#3', 'F3', 'E3', 'D#3', 'D3', 'C#3', 'C3', 'B2', 'A#2', 'A2', 'G#2', 'G2', 'F#2', 'F2', 'E2', 'D#2', 'D2', 'C#2', 'C2', 'B1', 'A#1', 'A1', 'G#1', 'G1', 'F#1', 'F1', 'E1', 'D#1', 'D1', 'C#1', 'C1'],
     bachPrelude];
+
+let saveFiles = {
+    "Bach Prelude": saveTemp,
+}
 
 const createSaveFile = (saveFileArray) => {
     saveFileArray = [];
@@ -9071,7 +9104,7 @@ const createSaveFile = (saveFileArray) => {
     let beats = document.getElementById('beatsInput').value;
     let counts = document.getElementById('countsInput').value;
     let kitName = document.getElementById('kits').innerHTML;
-    let kit = kitArrayDict[instrumentSet.innerHTML][0];
+    let kit = kitArrayDict[document.getElementById('kits').innerHTML][0];
     let kitPreload = [];
     document.querySelectorAll('.instrument-dropdown-button').forEach(elem => {
         kitPreload.push(elem.innerHTML);
@@ -9090,6 +9123,43 @@ document.getElementById('save').addEventListener('click', event => {
     // saveFiles = 
 })
 
+document.getElementById('saveFile').addEventListener('click', event => {
+    let saveName = document.getElementById('saveName').value;
+    if(saveName != '') {
+        let newSave = [];
+        // let mainEffect = [];
+        // The main effect for the entire workspace and it's values
+        let instruments = document.getElementById('instruments').value;
+        // let effects = [];
+        // grab effects and settings (after I've made them) and plug them into the array
+        let tempo = document.getElementById('tempo').value;
+        let beats = document.getElementById('beatsInput').value;
+        let counts = document.getElementById('countsInput').value;
+        let kitName = document.getElementById('kits').innerHTML;
+        let kit = kitArrayDict[document.getElementById('kits').innerHTML][0];
+        let kitPreload = [];
+        document.querySelectorAll('.instrument-dropdown-button').forEach(elem => {
+            kitPreload.push(elem.innerHTML);
+        });
+        let checksArray = [];
+        let notesTemp = document.querySelectorAll('.note');
+        for(let i = 0; i < notesTemp.length; i++) {
+            checksArray.push(notesTemp[i].getAttribute('checked'));
+        };
+        // let volumes = [];
+        // Create array for the volume VALUES to then be applied on load
+        // let pitches = [];
+        // Same as above
+        // let lengths = [];
+        // And the final
+
+        // Finally add the whole thing to a dictionary or something and local storage as the NAME
+    } else {
+        alert("File Needs a name");
+    };
+    console.log(saveName);
+})
+
 const loadSaveFile = (saveInfo) => {
     document.querySelector('.dropdowns-container').innerHTML = '<p class="title">Instruments</p>';
     document.querySelector('.close-container').innerHTML = '<p class="title">.</p>';
@@ -9103,6 +9173,11 @@ const loadSaveFile = (saveInfo) => {
     document.getElementById('kits').innerHTML = saveInfo[4];
     let kit = saveInfo[5];
     let preload = saveInfo[6];
+    // let volumes = saveInfo[7];
+    // let pitches = saveInfo[8];
+    // let lengths = saveInfo[9];
+    // let effects = saveInfo[10];          << Effects and options will need it's own function to figure out the needed options
+    // let effectsOptions = saveInfo[11];
     document.getElementById('instruments').value = preload.length;
     for(let i = 0; i < document.getElementById('instruments').value; i++) {
         loadInstrumentDropdowns(kit, preload, i);

@@ -18,7 +18,7 @@
                 <div class="save-container">
                     <label for="saveName">Save File:</label>
                     <input id="saveName" type="text" min="1" max="20">
-                    <button class="btn" id="loadFile1">Save</button>
+                    <button class="btn" id="saveFile">Save</button>
                 </div>
             </div>
             <div class="loadWindow">
@@ -32,6 +32,20 @@
             <div class="col">
                 <div class="image">
                     
+                </div>
+                <div class="workspace-effects">
+                    <p class="title">Effects</p>
+                    <div class="effects-container-main">
+                        <button id="effects" class="effect-dropdown">None</button>
+                        <div class="dropdown-content effect-choice">
+                            <a href="#" class="effect">None</a>
+                            <a href="#" class="effect">Distortion</a>
+                            <a href="#" class="effect">Phaser</a>
+                            <a href="#" class="effect">Chorus</a>
+                            <a href="#" class="effect">Auto-Wah</a>
+                            <a href="#" class="effect">Reverb</a>
+                        </div>
+                    </div>
                 </div>
                 <div class="workspaceInstrument-inputs">
                     <div class="instruments-inputs">
@@ -70,10 +84,10 @@
         </div>
         <div class="workspace-title-container">
             <div class="kits-dropdown">
-                <button id="kits" class="kit-dropdown">Synth Piano</button>
+                <button id="kits" class="kit-dropdown">Piano</button>
                 <div class="dropdown-content kit-choice">
+                    <a href="#" class="kit">Piano</a>
                     <a href="#" class="kit">Synth Piano</a>
-                    <a href="#" class="kit">Kit 2</a>
                     <a href="#" class="kit">Kit 3</a>
                 </div>
             </div>
@@ -97,6 +111,9 @@
                 <div class="dropdowns-container">
                     <p class="title">Instruments</p>
                 </div>
+                <div class="effects-container">
+                    <p class="title">FX</p>
+                </div>
                 <div class="close-container">
                     <p class="title">.</p>
                 </div>
@@ -110,6 +127,9 @@
                 </div>
                 <div class="pitches-container">
                     <p class="title">Pitch</p>
+                </div>
+                <div class="length-container">
+                    <p class="title">Length</p>
                 </div>
             </div>
         </div>
