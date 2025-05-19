@@ -61,6 +61,7 @@ body {
     justify-content: center;
     align-items: center;
     flex-basis: 33%;
+    gap: 5px;
 }
 
 .image {

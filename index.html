@@ -30,20 +30,70 @@
         </div>
         <div class="workspace-visuals-container">
             <div class="col">
-                <div class="image">
+                <!-- <div class="image">
                     
-                </div>
+                </div> -->
                 <div class="workspace-effects">
                     <p class="title">Effects</p>
                     <div class="effects-container-main">
-                        <button id="effects" class="effect-dropdown">None</button>
-                        <div class="dropdown-content effect-choice">
-                            <a href="#" class="effect">None</a>
-                            <a href="#" class="effect">Distortion</a>
-                            <a href="#" class="effect">Phaser</a>
-                            <a href="#" class="effect">Chorus</a>
-                            <a href="#" class="effect">Auto-Wah</a>
-                            <a href="#" class="effect">Reverb</a>
+                        <div class="effect-holder">
+                            <input type="checkbox" id="distortion">
+                            <label for="distortion">Distortion</label>
+                            <button id="distortion-controls" class="effect-options">></button>
+                            <div class="effect-controls">
+                                <label>Gain</label>
+                                <a href="#" class="effect"><input type="number" id="distortion-amount" value="0.8"></a>
+                            </div>
+                        </div>
+                        <div class="effect-holder">
+                            <input type="checkbox" id="phaser">
+                            <label for="phaser">Phaser</label>
+                            <button id="phaser-controls" class="effect-options">></button>
+                            <div class="effect-controls">
+                                <label>Frequency</label>
+                                <a href="#" class="effect"><input type="number" id="phaseFreq-amount" value="15"></a>
+                                <label>Octaves</label>
+                                <a href="#" class="effect"><input type="number" id="phaseOct-amount" value="5"></a>
+                                <label>Base Frequency</label>
+                                <a href="#" class="effect"><input type="number" id="phaseBFreq-amount" value="1000"></a>
+                            </div>
+                        </div>
+                        <div class="effect-holder">
+                            <input type="checkbox" id="chorus">
+                            <label for="chorus">Chorus</label>
+                            <button id="chorus-controls" class="effect-options">></button>
+                            <div class="effect-controls">
+                                <label>Frequency</label>
+                                <a href="#" class="effect"><input type="number" id="chorusFreq-amount" value="4"></a>
+                                <label>Delay Time</label>
+                                <a href="#" class="effect"><input type="number" id="chorusDelay-amount" value="2.5"></a>
+                                <label>Depth</label>
+                                <a href="#" class="effect"><input type="number" id="chorusDepth-amount" value="0.5"></a>
+                            </div>
+                        </div>
+                        <div class="effect-holder">
+                            <input type="checkbox" id="autoWah">
+                            <label for="autoWah">Auto-Wah</label>
+                            <button id="autoWah-controls" class="effect-options">></button>
+                            <div class="effect-controls">
+                                <label>Base Frequency</label>
+                                <a href="#" class="effect"><input type="number" id="wahBaseFreq-amount" value="50"></a>
+                                <label>Octaves</label>
+                                <a href="#" class="effect"><input type="number" id="wahOctaves-amount" value="6"></a>
+                                <label>Sensitivity</label>
+                                <a href="#" class="effect"><input type="number" id="wahSensitivity-amount" value="-30"></a>
+                                <label>Q Value</label>
+                                <a href="#" class="effect"><input type="number" id="wahQ-amount" value="6"></a>
+                            </div>
+                        </div>
+                        <div class="effect-holder">
+                            <input type="checkbox" id="reverb">
+                            <label for="reverb">Reverb</label>
+                            <button id="reverb-controls" class="effect-options">></button>
+                            <div class="effect-controls">
+                                <label>Dampening</label>
+                                <a href="#" class="effect"><input type="number" id="freeverbDampening-amount" value="1000"></a>
+                            </div>
                         </div>
                     </div>
                 </div>

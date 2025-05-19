@@ -1,15 +1,33 @@
+// const { Reverb } = require("tone");
 
 //create a synth and connect it to the main output (your speakers)
 async() => {
     await Tone.start();
 }
 
+let distorionAmount = document.getElementById('distortion-amount').value;
+
+let phaserFreq = document.getElementById('phaseFreq-amount').value;
+let phaserOctaves = document.getElementById('phaseOct-amount').value;
+let phaserBaseFreq = document.getElementById('phaseBFreq-amount').value;
+
+let chorusFreq = document.getElementById('chorusFreq-amount').value;
+let chorusDelay = document.getElementById('chorusDelay-amount').value;
+let chorusDepth = document.getElementById('chorusDepth-amount').value;
+
+let wahBaseFreq = document.getElementById('wahBaseFreq-amount').value;
+let wahOctaves = document.getElementById('wahOctaves-amount').value;
+let wahSensitivity = document.getElementById('wahSensitivity-amount').value;
+let wahQ = document.getElementById('wahQ-amount').value;
+
+let freeverbDampening = document.getElementById('freeverbDampening-amount').value;
+
 // Effects
-let distortion = new Tone.Distortion(0.8).toMaster();
+let distortion = new Tone.Distortion(distorionAmount).toMaster();
 let phaser = new Tone.Phaser({
-    "frequency" : 15,
-    "octaves" : 5,
-    "baseFrequency" : 1000
+    "frequency" : phaserFreq,
+    "octaves" : phaserOctaves,
+    "baseFrequency" : phaserBaseFreq
 }).toMaster();
 // (frequency, delayTime, depth)
 let chorus = new Tone.Chorus(4, 2.5, 0.5).toMaster();
@@ -73,14 +91,67 @@ const kitArrayDict = {
 let $beatsArray = [];
 
 // Buttons
+document.getElementById('distortion').addEventListener('click', event => {
+    let soundSample = kitArrayDict[instrumentSet.innerHTML][2];
+    distorionAmount = document.getElementById('distortion-amount').value;
+    distortion.distortion = distorionAmount;
 
+    soundSample.connect(distortion);
+})
+
+document.getElementById('phaser').addEventListener('click', event => {
+    let soundSample = kitArrayDict[instrumentSet.innerHTML][2];
+    phaserFreq = document.getElementById('phaseFreq-amount').value;
+    phaserOctaves = document.getElementById('phaseOct-amount').value;
+    phaserBaseFreq = document.getElementById('phaseBFreq-amount').value;
+    phaser.frequency = phaserFreq;
+    phaser.octaves = phaserOctaves;
+    phaser.baseFrequency = phaserBaseFreq;
+
+    soundSample.connect(phaser);
+})
+
+document.getElementById('chorus').addEventListener('click', event => {
+    let soundSample = kitArrayDict[instrumentSet.innerHTML][2];
+    chorusFreq = document.getElementById('chorusFreq-amount').value;
+    chorusDelay = document.getElementById('chorusDelay-amount').value;
+    chorusDepth = document.getElementById('chorusDepth-amount').value;
+    chorus.frequency = chorusFreq;
+    chorus.delayTime = chorusDelay;
+    chorus.depth = chorusDepth; // Need to make sure this actually works
+
+    soundSample.connect(chorus);
+})
+
+document.getElementById('autoWah').addEventListener('click', event => {
+    let soundSample = kitArrayDict[instrumentSet.innerHTML][2];
+    wahBaseFreq = document.getElementById('wahBaseFreq-amount').value;
+    wahOctaves = document.getElementById('wahOctaves-amount').value;
+    wahSensitivity = document.getElementById('wahSensitivity-amount').value;
+    wahQ = document.getElementById('wahQ-amount').value;
+    autoWah.baseFrequency = wahBaseFreq;
+    autoWah.octaves = wahOctaves;
+    autoWah.sensitivity = wahSensitivity;
+    autoWah.Q.value = wahQ;
+
+    soundSample.connect(autoWah);
+})
+
+document.getElementById('reverb').addEventListener('click', event => {
+    let soundSample = kitArrayDict[instrumentSet.innerHTML][2];
+    freeverbDamp = document.getElementById('freeverbDampening-amount').value;
+    freeverb.dampening.value = 1000;
+
+    soundSample.connect(Reverb);
+})
+
+// Update effects functions
 
 
 // Play/Pause/Stop
 document.querySelector('#play').addEventListener('click', event => {
-    playLoop();
     if(!$playing) {
-        // playLoop();
+        playLoop();
     };
 })
 
@@ -140,24 +211,86 @@ document.querySelectorAll('.kit').forEach(option => {
     });
 })
 
-// Effects Dropdown
-document.getElementById('effects').addEventListener('click', event => {
-    document.querySelector('.effect-choice').style.display = 'grid';
+// For the effects options
+document.getElementById('distortion-controls').addEventListener('click', event => {
+    event.target.parentElement.querySelector('.effect-controls').style.display = 'grid';
     event.stopPropagation();
 })
 
-document.addEventListener('click', event => {
-    let dropdown = document.querySelector('.effect-choice')
-    if(dropdown.style.display = 'grid') {
-        dropdown.style.display = 'none';
-    };
+// document.addEventListener('click', event => {
+//     let dropdown = document.querySelector('.effect-controls')
+//     if(dropdown.style.display = 'grid') {
+//         dropdown.style.display = 'none';
+//     };
+// })
+
+document.getElementById('phaser-controls').addEventListener('click', event => {
+    event.target.parentElement.querySelector('.effect-controls').style.display = 'grid';
+    event.stopPropagation();
 })
 
-document.querySelectorAll('.effect').forEach(option => {
-    option.addEventListener('click', event => {
-        document.getElementById('effects').innerHTML = event.target.innerHTML;
+document.getElementById('chorus-controls').addEventListener('click', event => {
+    event.target.parentElement.querySelector('.effect-controls').style.display = 'grid';
+    event.stopPropagation();
+})
+
+document.getElementById('autoWah-controls').addEventListener('click', event => {
+    event.target.parentElement.querySelector('.effect-controls').style.display = 'grid';
+    event.stopPropagation();
+})
+
+document.getElementById('reverb-controls').addEventListener('click', event => {
+    if(event.target.parentElement.querySelector('.effect-controls').style.display == 'grid') {
+        event.target.parentElement.querySelector('.effect-controls').style.display = 'none';
+    } else {
+        event.target.parentElement.querySelector('.effect-controls').style.display = 'grid';
+    };
+    event.stopPropagation();
+})
+
+
+// MAKE THE ABOVE INTO A LOOP TO JUST GRAB EVERY EFFECT ELEMENT
+
+document.querySelectorAll('.effect-controls').forEach(options => {
+    options.addEventListener('click', event => {
+        window.onclick = (e) => {
+            if(e.target != event.target) {
+                document.querySelectorAll('.effect-controls').forEach(popup => {
+                    popup.style.display = 'none';
+                });
+            };
+        };
     });
 })
+
+// document.addEventListener('click', event => {
+//     // let dropdown = document.querySelectorAll('.effect-controls')
+//     // dropdown.forEach(elem => {
+//     //         if(elem.style.display = 'grid') {
+//     //     elem.style.display = 'none';
+//     // };
+//     // })
+//     console.log("document");
+// })
+
+// // Effects Dropdown
+// document.getElementById('effects').addEventListener('click', event => {
+//     document.querySelector('.effect-choice').style.display = 'grid';
+//     event.stopPropagation();
+// })
+
+// document.getElementById('effects').addEventListener('click', event => {
+//     let dropdown = document.querySelector('.effect-choice')
+//     if(dropdown.style.display = 'grid') {
+//         dropdown.style.display = 'none';
+//     };
+// })
+
+// document.querySelectorAll('.effect').forEach(option => {
+//     option.addEventListener('click', event => {
+//         document.getElementById('effects').innerHTML = event.target.innerHTML;
+//     });
+// })
 
 // Instruments Dropdown
 const instrumentDropDown = (button) => {
@@ -415,6 +548,10 @@ loadWorkspace();
 addDropDownFunctions();
 removeButtonEvent(); // << Making new delete buttons needs to remove ALL the delete buttons
 
+const loadEffects = () => {
+
+}
+
 // Play Functions
 const playLoop = () => {
     let timer = 60000 / (document.getElementById('tempo').value * document.getElementById('countsInput').value);
@@ -425,19 +562,22 @@ const playLoop = () => {
     let pitches = Array.from(document.querySelectorAll('.pitch'));
     let noteLength = Array.from(document.querySelectorAll('.length'));
     let soundSample = kitArrayDict[instrumentSet.innerHTML][2];
-    let effect = effectsLibrary[document.getElementById('effects').innerHTML];
 
-    if(effect == 'none') {
-        // polySynth.disconnect(distortion);
-    } else {
-        polySynth.connect(effect);
+
+    // This sucks and is slow, only make a new Tone if the instrument has a different volume than default?
+    let soundsArray = [];
+    for(let i = 0; i < instruments.length; i++) {
+        let i = new Tone.PolySynth().toDestination(); 
+        i.connect(autoWah);
+        soundsArray.push(i);
     };
 
-    $playingInterval = setInterval(function() {playNote(beatColumns, columnsToPlay, instruments, soundSample, effect, volumes, noteLength)}, timer);
+
+    $playingInterval = setInterval(function() {playNote(beatColumns, columnsToPlay, instruments, soundSample, volumes, noteLength, soundsArray)}, timer);
     $playing = true;
 }
 
-const playNote = (notesArray, toPlay, instruments, soundSample, effect, volumes, noteLength) => {
+const playNote = (notesArray, toPlay, instruments, soundSample, volumes, noteLength, soundsArray) => {
     let notes = Array.from(notesArray[$counter].children);
     
     notes.forEach((note, index) => {
@@ -456,8 +596,9 @@ const playNote = (notesArray, toPlay, instruments, soundSample, effect, volumes,
             //     soundSample.connect(effect);
             //     soundSample.triggerAttackRelease(instruments[index - 1].innerHTML, length);
             // };
-            soundSample.volume.value = volumeNum;
-            soundSample.triggerAttackRelease(instruments[index - 1].innerHTML, length);
+            soundsArray[index - 1].volume.value = volumeNum;
+            // soundSample.triggerAttackRelease(instruments[index - 1].innerHTML, length);
+            soundsArray[index - 1].triggerAttackRelease(instruments[index - 1].innerHTML, length);
         };
     });
 
